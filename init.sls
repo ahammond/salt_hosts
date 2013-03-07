@@ -1,8 +1,8 @@
-grains['localhost']:
+{{ grains['localhost'] }}:
   host.present:
     - ip: 127.0.0.1
     - names:
-      - grains['localhost']
+      - {{ grains['localhost'] }}
       - localhost
       - localhost.localdomain
 
