@@ -7,10 +7,10 @@ grains['localhost']:
       - localhost.localdomain
 
 {% for hostname, args in pillar['hosts'].iteritems() %}
-hostname:
+{{ hostname }}:
   host.present:
-    - ip: args['ip']
-{% if names in args %}
+    - ip: {{ args['ip'] }}
+{% if 'names' in args %}
     - names:
 {% for name in args['names'] %}
       - {{ name }}
