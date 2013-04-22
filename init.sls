@@ -1,6 +1,9 @@
 #!pydsl
 
-from salt.util.socket_util import IPv4Address
+try:
+    from ipaddress import IPv4Address
+except ImportError:
+    from salt.util.socket_util import IPv4Address
 
 TIMEOUT = 5
 
@@ -8,7 +11,7 @@ TIMEOUT = 5
 class ReceiptIPv4(IPv4Address):
   @property
   def is_vpn(self):
-    return 10 == self.dotted_quad[0] and 8 == self.dotted_quad[1]
+    return IPv4Address(u'10.8.0.0') <= self <= IPv4Address(u'10.8.255.255')
 
 
 datacenters = __salt__['publish.publish']('*', 'grains.item', 'datacenter', 'glob', TIMEOUT)
@@ -25,8 +28,8 @@ state(localhost).host.present(
 for hostname in sorted(ip_addrs.keys()):
     # Start by assuming we don't have any public or private IPs
     # so, instead provide almost useless Link Local addresses.
-    public_ips = [IPv4Address('169.254.0.1'),]
-    private_ips = [IPv4Address('169.254.0.1'),]
+    public_ips = [IPv4Address(u'169.254.0.1'),]
+    private_ips = [IPv4Address(u'169.254.0.1'),]
     # And don't include _any_ VPN ips until we get some
     vpn_ips = []
     for ip in sorted([ReceiptIPv4(x) for x in ip_addrs.get(hostname, [])]):
