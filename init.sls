@@ -34,6 +34,9 @@ state(localhost).host.present(
 
 for hostname in sorted(ip_addrs.keys()):
     l.info('setting hostname for %s', hostname)
+
+    next
+    
     # Start by assuming we don't have any public or private IPs
     # so, instead provide almost useless Link Local addresses.
     public_ips = [IPv4Address(u'169.254.0.1'),]
