@@ -18,7 +18,7 @@ localhost = __salt__['grains.items']('localhost')
 local_datacenter = __salt__['grains.items']('datacenter')
 
 state(localhost).host.present(
-  ip='127.0.0.1'
+  ip='127.0.0.1',
   names=[localhost, 'localhost', 'localhost.localdomain'].append(__pillar__['hosts'].get(localhost, {}).get('names', []))
 )
 
