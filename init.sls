@@ -11,7 +11,7 @@ class ReceiptIPv4(IPv4Address):
     return 10 == self.dotted_quad[0] and 8 == self.dotted_quad[1]
 
 
-datacenters = __salt__['publish.publish']('*', 'grains.items', 'datacenter', 'glob', TIMEOUT)
+datacenters = __salt__['publish.publish']('*', 'grains.item', 'datacenter', 'glob', TIMEOUT)
 ip_addrs = __salt__['publish.publish']('*', 'network.ip_addrs', '', 'glob', TIMEOUT)
 
 localhost = __salt__['grains.items']('localhost')
