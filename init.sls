@@ -29,8 +29,7 @@ for hostname in sorted(ip_addrs.keys()):
     private_ips = [IPv4Address('169.254.0.1'),]
     # And don't include _any_ VPN ips until we get some
     vpn_ips = []
-    for ip_str in sorted(ip_addrs.get(hostname, [])):
-        ip = ReceiptIPv4(ip_str)
+    for ip in sorted([ReceiptIPv4(x) for x in ip_addrs.get(hostname, [])]):
         if ip.is_vpn:
             vpn_ips.push(ip)
         elif ip.is_private:
