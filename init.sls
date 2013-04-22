@@ -22,7 +22,7 @@ local_datacenter = __salt__['grains.items']('datacenter')
 
 state(localhost).host.present(
   ip='127.0.0.1',
-  names=[localhost, 'localhost', 'localhost.localdomain'].append(__pillar__['hosts'].get(localhost, {}).get('names', []))
+  names=[localhost, 'localhost', 'localhost.localdomain'].extend(__pillar__['hosts'].get(localhost, {}).get('names', []))
 )
 
 for hostname in sorted(ip_addrs.keys()):
@@ -47,5 +47,5 @@ for hostname in sorted(ip_addrs.keys()):
 
     state(hostname).host.present(
         ip=localized_ip,
-        names=[hostname,].append(__pillar__['hosts'].get(hostname, {}).get('names', []))
+        names=[hostname,].extend(__pillar__['hosts'].get(hostname, {}).get('names', []))
     )
