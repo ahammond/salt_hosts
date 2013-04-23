@@ -44,11 +44,11 @@ for hostname in sorted(ip_addrs.keys()):
     vpn_ips = []
     for ip in sorted([ReceiptIPv4(unicode(x)) for x in ip_addrs.get(hostname, [])]):
         if ip.is_vpn:
-            vpn_ips.push(ip)
+            vpn_ips.append(ip)
         elif ip.is_private:
-            private_ips.push(ip)
+            private_ips.append(ip)
         else:
-            public_ips.push(ip)
+            public_ips.append(ip)
 
     l.debug('public_ips: %r', public_ips)
     l.debug('private_ips: %r', private_ips)
