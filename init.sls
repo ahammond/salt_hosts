@@ -33,17 +33,16 @@ state(localhost).host.present(
 )
 
 for hostname in sorted(ip_addrs.keys()):
+    if localhost == hostname:
+        next
     l.info('setting hostname for %s', hostname)
-
-    next
-    
     # Start by assuming we don't have any public or private IPs
     # so, instead provide almost useless Link Local addresses.
     public_ips = [IPv4Address(u'169.254.0.1'),]
     private_ips = [IPv4Address(u'169.254.0.1'),]
     # And don't include _any_ VPN ips until we get some
     vpn_ips = []
-    for ip in sorted([ReceiptIPv4(x) for x in ip_addrs.get(hostname, [])]):
+    for ip in sorted([ReceiptIPv4(unicode(x)) for x in ip_addrs.get(hostname, [])]):
         if ip.is_vpn:
             vpn_ips.push(ip)
         elif ip.is_private:
