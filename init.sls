@@ -22,8 +22,8 @@ l.debug('datacenters: %r', datacenters)
 ip_addrs = __salt__['publish.publish']('*', 'network.ip_addrs', '', 'glob', TIMEOUT)
 l.debug('ip_addrs: %r', ip_addrs)
 
-localhost = __salt__['grains.items']('localhost')
-local_datacenter = __salt__['grains.items']('datacenter')
+localhost = __grains__['localhost']
+local_datacenter = __grains__['datacenter']
 
 local_names = [localhost, 'localhost', 'localhost.localdomain']
 local_names.extend(__pillar__.get('hosts', {}).get(localhost, {}).get('names', []))
