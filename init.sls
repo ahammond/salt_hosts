@@ -64,6 +64,6 @@ for hostname in sorted(ip_addrs.keys()):
     names.extend(__pillar__.get('hosts', {}).get(hostname, {}).get('names', []))
     l.info('setting %s -> %r', localized_ip, names)
     state(hostname).host.present(
-        ip=localized_ip,
+        ip=str(localized_ip),
         names=names
     )
