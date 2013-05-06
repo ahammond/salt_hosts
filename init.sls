@@ -25,6 +25,13 @@ l.debug('ip_addrs: %r', ip_addrs)
 localhost = __grains__['localhost']
 local_datacenter = __grains__['datacenter']
 
+# we'll handle localhost as a special case
+if localhost in ip_addrs:
+    del ip_addrs[localhost]
+
+if localhost in datacenters:
+    del datacenters[localhost]
+
 local_names = [localhost, 'localhost', 'localhost.localdomain']
 local_names.extend(__pillar__.get('hosts', {}).get(localhost, {}).get('names', []))
 state(localhost).host.present(
@@ -33,8 +40,6 @@ state(localhost).host.present(
 )
 
 for hostname in sorted(ip_addrs.keys()):
-    if localhost == hostname:
-        next
     l.info('setting hostname for %s', hostname)
     # Start by assuming we don't have any public or private IPs
     # so, instead provide almost useless Link Local addresses.
