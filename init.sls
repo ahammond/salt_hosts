@@ -41,11 +41,10 @@ state(localhost).host.present(
 
 for hostname in sorted(ip_addrs.keys()):
     l.info('setting hostname for %s', hostname)
-    # Start by assuming we don't have any public or private IPs
-    # so, instead provide almost useless Link Local addresses.
+    # Start by assuming we don't have any IPs, provide almost useless Link Local addresses.
     public_ips = [IPv4Address(u'169.254.0.1'),]
-    private_ips = [IPv4Address(u'169.254.0.1'),]
-    # And don't include _any_ VPN ips until we get some
+    # And don't include _any_ other ips until we get some
+    private_ips = []
     vpn_ips = []
     for ip in sorted([ReceiptIPv4(unicode(x)) for x in ip_addrs.get(hostname, [])]):
         if ip.is_vpn:
@@ -60,7 +59,7 @@ for hostname in sorted(ip_addrs.keys()):
     l.debug('vpn_ips: %r', vpn_ips)
 
     if local_datacenter == datacenters.get(hostname, None):
-        localized_ip = private_ips.pop()
+        localized_ip = private_ips.pop() if private_ips else public_ips.pop()
     else:
         localized_ip = vpn_ips.pop() if vpn_ips else public_ips.pop()
     l.debug('localized_ip: %s', hostname, localized_ip)
