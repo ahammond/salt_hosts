@@ -22,7 +22,7 @@ l.debug('datacenters: %r', datacenters)
 ip_addrs = __salt__['publish.publish']('*', 'network.ip_addrs', '', 'glob', TIMEOUT)
 l.debug('ip_addrs: %r', ip_addrs)
 
-localhost = __grains__['localhost']
+localhost = __grains__['id']
 local_datacenter = __grains__['datacenter']
 
 # we'll handle localhost as a special case
