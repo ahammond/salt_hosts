@@ -32,12 +32,15 @@ if localhost in ip_addrs:
 if localhost in datacenters:
     del datacenters[localhost]
 
-local_names = [localhost, 'localhost', 'localhost.localdomain']
+state(localhost).host.present(ip='127.0.0.1')
+
+local_names = ['localhost', 'localhost.localdomain']
 local_names.extend(__pillar__.get('hosts', {}).get(localhost, {}).get('names', []))
-state(localhost).host.present(
-  ip='127.0.0.1',
-  names=local_names
-)
+state('localhost')\
+    .host.present(
+        ip='127.0.0.1',
+        names=local_names)\
+    .require(host=localhost)
 
 for hostname in sorted(ip_addrs.keys()):
     l.info('setting hostname for %s', hostname)
@@ -68,7 +71,8 @@ for hostname in sorted(ip_addrs.keys()):
     names.extend(__pillar__.get('hosts', {}).get(hostname, {}).get('names', []))
     names.reverse()
     l.info('setting %s -> %r', localized_ip, names)
-    state(hostname).host.present(
-        ip=str(localized_ip),
-        names=names
-    )
+    state(hostname)\
+        .host.present(
+            ip=str(localized_ip),
+            names=names)\
+        .require(host=localhost)
