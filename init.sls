@@ -25,6 +25,8 @@ l.debug('ip_addrs: %r', ip_addrs)
 localhost = __grains__['id']
 local_datacenter = __grains__['datacenter']
 
+l.debug('localhost: %s, datacenter: %s', localhost, local_datacenter)
+
 # we'll handle localhost as a special case
 if localhost in ip_addrs:
     del ip_addrs[localhost]
@@ -61,9 +63,13 @@ for hostname in sorted(ip_addrs.keys()):
     l.debug('private_ips: %r', private_ips)
     l.debug('vpn_ips: %r', vpn_ips)
 
-    if local_datacenter == datacenters.get(hostname, None):
+    other_datacenter = datacenters.get(hostname, None)
+    l.debug('datacenter: %r', other_datacenter)
+    if local_datacenter == other_datacenter:
+        l.debug('local: %r == other: %r', local_datacenter, other_datacenter)
         localized_ip = private_ips.pop() if private_ips else public_ips.pop()
     else:
+        l.debug('local: %r != other: %r', local_datacenter, other_datacenter)
         localized_ip = vpn_ips.pop() if vpn_ips else public_ips.pop()
     l.debug('localized_ip: %s', hostname, localized_ip)
 
