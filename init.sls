@@ -63,7 +63,7 @@ for hostname in sorted(ip_addrs.keys()):
     l.debug('private_ips: %r', private_ips)
     l.debug('vpn_ips: %r', vpn_ips)
 
-    other_datacenter = datacenters.get(hostname, None)
+    other_datacenter = datacenters.get(hostname, {}).get('datacenter', None)
     l.debug('datacenter: %r', other_datacenter)
     if local_datacenter == other_datacenter:
         l.debug('local: %r == other: %r', local_datacenter, other_datacenter)
