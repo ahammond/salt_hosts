@@ -12,9 +12,9 @@ TIMEOUT = 35
 
 
 class ReceiptIPv4(IPv4Address):
-  @property
-  def is_vpn(self):
-    return IPv4Address(u'10.8.0.0') <= self <= IPv4Address(u'10.8.255.255')
+    @property
+    def is_vpn(self):
+        return IPv4Address(u'10.8.0.0') <= self <= IPv4Address(u'10.8.255.255')
 
 l = getLogger('hosts')
 
