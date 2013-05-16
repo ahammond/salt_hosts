@@ -1,5 +1,6 @@
 #!pydsl
 
+from itertools import chain
 from logging import getLogger
 
 try:
@@ -117,3 +118,16 @@ for hostname in sorted(ip_addrs.keys()):
             ip=str(localized_ip),
             names=names)\
         .require(host=localhost)
+
+    # we should also map the other ips we know about to names.
+    # note the require stanza which ensures that the localized ip is prefered.
+    counter = 0
+    for other_ip in chain(public_ips, private_ips, vpn_ips):
+        if other_ip is local_link_address:
+            continue
+        counter += 1
+        state('{0}_{1}'.format(hostname, counter))\
+            .host.present(
+                ip=str(other_ip),
+                names=names)\
+            .require(host=hostname)
