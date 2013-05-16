@@ -112,12 +112,13 @@ for hostname in sorted(ip_addrs.keys()):
         .require(host=localhost)
 
     # we should also map the other ips we know about to names.
-    # note the require stanza which ensures that the localized ip is prefered.
+    # note the require stanza which ensures that the localized ip is preferred.
     counter = 0
     for other_ip in chain(public_ips, private_ips, vpn_ips):
         if other_ip is link_local_address:
             continue
         counter += 1
+        l.info('setting %s -> %r', other_ip, names)
         state('{0}_{1}'.format(hostname, counter))\
             .host.present(
                 ip=str(other_ip),
