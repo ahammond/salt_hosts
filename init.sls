@@ -24,6 +24,7 @@ ip_addrs = __salt__['publish.publish']('*', 'network.ip_addrs', '', 'glob', TIME
 l.debug('ip_addrs: %r', ip_addrs)
 
 localhost = __grains__['id']
+localhost_ip6 = '{0}_ip6'.format(localhost)
 local_datacenter = __grains__['datacenter']
 localhost_additional_names = __pillar__.get('hosts', {}).get(localhost, {}).get('names', [])
 
@@ -44,6 +45,32 @@ state('localhost')\
         ip='127.0.0.1',
         names=local_names)\
     .require(host=localhost)
+
+# IPv6 localhost information
+state(localhost_ip6).host.present(ip='::1', names=(localhost,))
+local_names_ip6 = ['ip6-localhost', 'ip6-loopback']
+local_names_ip6.extend(localhost_additional_names)
+state('localhost_ip6')\
+    .host.present(
+        ip='::1',
+        names=local_names_ip6)\
+    .require(host=localhost_ip6)
+
+# Apparently these are good to have on IPv6 capable hosts.
+state('ip6-localnet').host.present(ip='fe00::0')
+state('ip6-mcastprefix').host.present(ip='ff00::0')
+state('ip6-allnodes').host.present(ip='ff02::1')
+state('ip6-allrouters').host.present(ip='ff02::2')
+
+# include name references for all the other ips that belong to this host.
+counter = 0
+for extra_ip in __grains__.get('ipv4', []):
+    counter += 1
+    state('localhost_{}'.format(counter))\
+        .host.present(
+            ip=extra_ip,
+            names=local_name)\
+        .require(host='localhost')
 
 for hostname in sorted(ip_addrs.keys()):
     l.info('setting hostname for %s', hostname)
