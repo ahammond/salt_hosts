@@ -20,17 +20,13 @@ l = getLogger('hosts')
 
 
 datacenters = __salt__['publish.publish']('*', 'grains.item', 'datacenter', 'glob', TIMEOUT)
-l.debug('datacenters: %r', datacenters)
 ip_addrs = __salt__['publish.publish']('*', 'network.ip_addrs', '', 'glob', TIMEOUT)
-l.debug('ip_addrs: %r', ip_addrs)
 
 localhost = __grains__['id']
 localhost_ip6 = '{0}_ip6'.format(localhost)
 local_datacenter = __grains__['datacenter']
 link_local_address = ReceiptIPv4(u'169.254.0.1')
 localhost_additional_names = __pillar__.get('hosts', {}).get(localhost, {}).get('names', [])
-
-l.debug('localhost: %s, datacenter: %s', localhost, local_datacenter)
 
 # we'll handle localhost as a special case
 if localhost in ip_addrs:
@@ -88,10 +84,6 @@ for hostname in sorted(ip_addrs.keys()):
             private_ips.append(ip)
         else:
             public_ips.append(ip)
-
-    l.debug('public_ips: %r', public_ips)
-    l.debug('private_ips: %r', private_ips)
-    l.debug('vpn_ips: %r', vpn_ips)
 
     # decide which ip is appropriate to use.
     # if the host minion is in the same datacenter as the minion we're considering,
