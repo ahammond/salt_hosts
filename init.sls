@@ -71,7 +71,7 @@ for extra_ip in __grains__.get('ipv4', []):
     state('localhost_{0}'.format(counter))\
         .host.present(
             ip=extra_ip,
-            names=local_name)\
+            names=local_names)\
         .require(host='localhost')
 
 for hostname in sorted(ip_addrs.keys()):
