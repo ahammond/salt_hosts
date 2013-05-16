@@ -92,6 +92,12 @@ for hostname in sorted(ip_addrs.keys()):
     l.debug('private_ips: %r', private_ips)
     l.debug('vpn_ips: %r', vpn_ips)
 
+    # decide which ip is appropriate to use.
+    # if the host minion is in the same datacenter as the minion we're considering,
+    # then we should prefer a private ip, if there is one available.
+    # otherwise, we should prefer a vpn ip, if there is one available.
+    # in general a public ip is least desirable because it usually means
+    # paying for the traffic used.
     other_datacenter = datacenters.get(hostname, {}).get('datacenter', None)
     l.debug('datacenter: %r', other_datacenter)
     if local_datacenter == other_datacenter:
