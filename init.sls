@@ -26,6 +26,7 @@ l.debug('ip_addrs: %r', ip_addrs)
 localhost = __grains__['id']
 localhost_ip6 = '{0}_ip6'.format(localhost)
 local_datacenter = __grains__['datacenter']
+link_local_address = ReceiptIPv4(u'169.254.0.1')
 localhost_additional_names = __pillar__.get('hosts', {}).get(localhost, {}).get('names', [])
 
 l.debug('localhost: %s, datacenter: %s', localhost, local_datacenter)
@@ -75,7 +76,7 @@ for extra_ip in __grains__.get('ipv4', []):
 for hostname in sorted(ip_addrs.keys()):
     l.info('setting hostname for %s', hostname)
     # Start by assuming we don't have any IPs, provide almost useless Link Local addresses.
-    public_ips = [IPv4Address(u'169.254.0.1'),]
+    public_ips = [link_local_address,]
     # And don't include _any_ other ips until we get some
     private_ips = []
     vpn_ips = []
