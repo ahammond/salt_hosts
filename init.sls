@@ -123,7 +123,7 @@ for hostname in sorted(ip_addrs.keys()):
     # note the require stanza which ensures that the localized ip is prefered.
     counter = 0
     for other_ip in chain(public_ips, private_ips, vpn_ips):
-        if other_ip is local_link_address:
+        if other_ip is link_local_address:
             continue
         counter += 1
         state('{0}_{1}'.format(hostname, counter))\
