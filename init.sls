@@ -17,6 +17,7 @@ class ReceiptIPv4(IPv4Address):
 
 l = getLogger('hosts')
 
+
 datacenters = __salt__['publish.publish']('*', 'grains.item', 'datacenter', 'glob', TIMEOUT)
 l.debug('datacenters: %r', datacenters)
 ip_addrs = __salt__['publish.publish']('*', 'network.ip_addrs', '', 'glob', TIMEOUT)
@@ -24,6 +25,7 @@ l.debug('ip_addrs: %r', ip_addrs)
 
 localhost = __grains__['id']
 local_datacenter = __grains__['datacenter']
+localhost_additional_names = __pillar__.get('hosts', {}).get(localhost, {}).get('names', [])
 
 l.debug('localhost: %s, datacenter: %s', localhost, local_datacenter)
 
@@ -35,9 +37,8 @@ if localhost in datacenters:
     del datacenters[localhost]
 
 state(localhost).host.present(ip='127.0.0.1')
-
 local_names = ['localhost', 'localhost.localdomain']
-local_names.extend(__pillar__.get('hosts', {}).get(localhost, {}).get('names', []))
+local_names.extend(localhost_additional_names)
 state('localhost')\
     .host.present(
         ip='127.0.0.1',
