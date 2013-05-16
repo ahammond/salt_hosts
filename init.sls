@@ -67,7 +67,7 @@ state('ip6-allrouters').host.present(ip='ff02::2')
 counter = 0
 for extra_ip in __grains__.get('ipv4', []):
     counter += 1
-    state('localhost_{}'.format(counter))\
+    state('localhost_{0}'.format(counter))\
         .host.present(
             ip=extra_ip,
             names=local_name)\
