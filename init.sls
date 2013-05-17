@@ -6,7 +6,7 @@ from logging import getLogger
 try:
     from ipaddress import IPv4Address
 except ImportError:
-    from salt.util.socket_util import IPv4Address
+    from salt.utils.socket_util import IPv4Address
 
 TIMEOUT = 35
 
