@@ -21,14 +21,6 @@ l = getLogger('hosts')
 datacenters = __salt__['publish.publish']('*', 'grains.item', 'datacenter', 'glob', TIMEOUT)
 ip_addrs = __salt__['publish.publish']('*', 'network.ip_addrs', '', 'glob', TIMEOUT)
 
-# Salt is pooping a __jid__ into the return hash sometimes:
-if '__jid__' in datacenters:
-    l.debug('Removing __jid__ junk from datacenters result set')
-    del(datacenters['__jid__'])
-if '__jid__' in ip_addrs:
-    l.debug('Removing __jid__ junk from ip_addrs result set')
-    del(ip_addrs['__jid__'])
-
 localhost = __grains__['id']
 localhost_ip6 = '{0}_ip6'.format(localhost)
 local_datacenter = __grains__['datacenter']
