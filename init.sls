@@ -18,7 +18,6 @@ class ReceiptIPv4(IPv4Address):
 
 l = getLogger('hosts')
 
-
 datacenters = __salt__['publish.publish']('*', 'grains.item', 'datacenter', 'glob', TIMEOUT)
 ip_addrs = __salt__['publish.publish']('*', 'network.ip_addrs', '', 'glob', TIMEOUT)
 
@@ -132,3 +131,4 @@ for hostname in sorted(ip_addrs.keys()):
                 ip=str(other_ip),
                 names=names)\
             .require(host=hostname)
+l.debug('completed')
