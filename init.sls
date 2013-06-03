@@ -44,7 +44,7 @@ state('localhost')\
     .require(host=localhost)
 
 # IPv6 localhost information
-state(localhost_ip6).host.present(ip='::1', names=(localhost,))
+state(localhost_ip6).host.present(ip='::1')
 local_names_ip6 = ['ip6-localhost', 'ip6-loopback']
 local_names_ip6.extend(localhost_additional_names)
 state('localhost_ip6')\
