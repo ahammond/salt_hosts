@@ -44,25 +44,25 @@ state('localhost')\
     .require(host=localhost)
 
 # IPv6 localhost information
-state(localhost_ip6)\
-    .host.present(
-        ip='::1',
-        names=[localhost,])\
-    .require(host='localhost')
-
-local_names_ip6 = ['ip6-localhost', 'ip6-loopback']
-local_names_ip6.extend(localhost_additional_names)
-state('localhost_ip6')\
-    .host.present(
-        ip='::1',
-        names=local_names_ip6)\
-    .require(host=localhost_ip6)
-
-# Apparently these are good to have on IPv6 capable hosts.
-state('ip6-localnet').host.present(ip='fe00::0').require(host='localhost_ip6')
-state('ip6-mcastprefix').host.present(ip='ff00::0').require(host='localhost_ip6')
-state('ip6-allnodes').host.present(ip='ff02::1').require(host='localhost_ip6')
-state('ip6-allrouters').host.present(ip='ff02::2').require(host='localhost_ip6')
+#state(localhost_ip6)\
+#    .host.present(
+#        ip='::1',
+#        names=[localhost,])\
+#    .require(host='localhost')
+#
+#local_names_ip6 = ['ip6-localhost', 'ip6-loopback']
+#local_names_ip6.extend(localhost_additional_names)
+#state('localhost_ip6')\
+#    .host.present(
+#        ip='::1',
+#        names=local_names_ip6)\
+#    .require(host=localhost_ip6)
+#
+## Apparently these are good to have on IPv6 capable hosts.
+#state('ip6-localnet').host.present(ip='fe00::0').require(host='localhost_ip6')
+#state('ip6-mcastprefix').host.present(ip='ff00::0').require(host='localhost_ip6')
+#state('ip6-allnodes').host.present(ip='ff02::1').require(host='localhost_ip6')
+#state('ip6-allrouters').host.present(ip='ff02::2').require(host='localhost_ip6')
 
 # include name references for all the other ips that belong to this host.
 #counter = 0
