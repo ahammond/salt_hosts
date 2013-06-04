@@ -43,36 +43,17 @@ state('localhost')\
         names=local_names)\
     .require(host=localhost)
 
-# IPv6 localhost information
-#state(localhost_ip6)\
-#    .host.present(
-#        ip='::1',
-#        names=[localhost,])\
-#    .require(host='localhost')
-#
-#local_names_ip6 = ['ip6-localhost', 'ip6-loopback']
-#local_names_ip6.extend(localhost_additional_names)
-#state('localhost_ip6')\
-#    .host.present(
-#        ip='::1',
-#        names=local_names_ip6)\
-#    .require(host=localhost_ip6)
-#
-## Apparently these are good to have on IPv6 capable hosts.
-#state('ip6-localnet').host.present(ip='fe00::0').require(host='localhost_ip6')
-#state('ip6-mcastprefix').host.present(ip='ff00::0').require(host='localhost_ip6')
-#state('ip6-allnodes').host.present(ip='ff02::1').require(host='localhost_ip6')
-#state('ip6-allrouters').host.present(ip='ff02::2').require(host='localhost_ip6')
-
 # include name references for all the other ips that belong to this host.
-#counter = 0
-#for extra_ip in __grains__.get('ipv4', []):
-#    counter += 1
-#    state('localhost_{0}'.format(counter))\
-#        .host.present(
-#            ip=extra_ip,
-#            names=local_names)\
-#        .require(host='localhost')
+counter = 0
+for extra_ip in __grains__.get('ipv4', []):
+    if '127.0.0.1' == extra_ip:
+        continue
+    counter += 1
+    state('localhost_{0}'.format(counter))\
+        .host.present(
+            ip=extra_ip,
+            names=[localhost, ])\
+        .require(host='localhost')
 
 for hostname in sorted(ip_addrs.keys()):
     l.info('setting hostname for %s', hostname)
