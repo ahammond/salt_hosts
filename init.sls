@@ -43,18 +43,6 @@ state('localhost')\
         names=local_names)\
     .require(host=localhost)
 
-# include name references for all the other ips that belong to this host.
-counter = 0
-for extra_ip in __grains__.get('ipv4', []):
-    if '127.0.0.1' == extra_ip:
-        continue
-    counter += 1
-    state('localhost_{0}'.format(counter))\
-        .host.present(
-            ip=extra_ip,
-            names=[localhost, ])\
-        .require(host='localhost')
-
 for hostname in sorted(ip_addrs.keys()):
     l.info('setting hostname for %s', hostname)
     # Start by assuming we don't have any IPs, provide almost useless Link Local addresses.
@@ -95,16 +83,4 @@ for hostname in sorted(ip_addrs.keys()):
             ip=str(localized_ip),
             names=names)\
         .require(host=localhost)
-
-    # we should also map the other ips we know about to names.
-    # note the require stanza which ensures that the localized ip is preferred.
-    #counter = 0
-    #for other_ip in chain(public_ips, private_ips, vpn_ips):
-    #    if other_ip is link_local_address:
-    #        continue
-    #    counter += 1
-    #    l.info('setting %s -> %r', other_ip, names)
-    #    state('{0}_{1}'.format(hostname, counter))\
-    #        .host.present(ip=str(other_ip), names=names)\
-    #        .require(host=hostname)
 l.debug('completed')
