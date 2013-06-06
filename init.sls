@@ -21,6 +21,19 @@ l = getLogger('hosts')
 datacenters = __salt__['publish.publish']('*', 'grains.item', 'datacenter', 'glob', TIMEOUT)
 ip_addrs = __salt__['publish.publish']('*', 'network.ip_addrs', '', 'glob', TIMEOUT)
 
+l.info('hosts responding for grains.items: {0}, network.ip_addrs: {1}'.format(len(datacenters), len(ip_addrs)))
+
+datacenter_keys = datacenters.keys()
+ip_addr_keys = ip_addrs.keys()
+
+in_dc_but_not_addr = [ x for x in datacenter_keys if x not in ip_addr_keys ]
+in_addr_but_not_dc = [ x for x in ip_addr_keys if x not in datacenter_keys ]
+
+if in_dc_but_not_addr:
+    l.error('in grains.item but not network.ip_addrs: %r', in_dc_but_not_addr)
+if in_addr_but_not_dc:
+    l.error('in network.ip_addrs but not grains.item: %r', in_addr_but_not_dc)
+
 localhost = __grains__['id']
 localhost_ip6 = '{0}_ip6'.format(localhost)
 local_datacenter = __grains__['datacenter']
