@@ -8,7 +8,7 @@ try:
 except ImportError:
     from salt.utils.socket_util import IPv4Address
 
-TIMEOUT = 35
+TIMEOUT = 10
 
 
 class ReceiptIPv4(IPv4Address):
