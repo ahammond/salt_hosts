@@ -63,7 +63,7 @@ for hostname in sorted(ip_addrs.keys()):
     # And don't include _any_ other ips until we get some
     private_ips = []
     vpn_ips = []
-    for ip in sorted([ReceiptIPv4(unicode(x)) for x in ip_addrs.get(hostname, [])]):
+    for ip in sorted([ReceiptIPv4(unicode(x)) for x in ip_addrs.get(hostname, []) if not 'ret' == x]):
         if ip.is_vpn:
             vpn_ips.append(ip)
         elif ip.is_private:
