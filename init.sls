@@ -26,8 +26,8 @@ l.info('hosts responding for grains.items: {0}, network.ip_addrs: {1}'.format(le
 datacenter_keys = datacenters.keys()
 ip_addr_keys = ip_addrs.keys()
 
-in_dc_but_not_addr = [ x for x in datacenter_keys if x not in ip_addr_keys ]
-in_addr_but_not_dc = [ x for x in ip_addr_keys if x not in datacenter_keys ]
+in_dc_but_not_addr = [x for x in datacenter_keys if x not in ip_addr_keys]
+in_addr_but_not_dc = [x for x in ip_addr_keys if x not in datacenter_keys]
 
 if in_dc_but_not_addr:
     l.error('in grains.item but not network.ip_addrs: %r', in_dc_but_not_addr)
